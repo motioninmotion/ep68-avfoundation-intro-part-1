@@ -23,9 +23,12 @@ class CameraService
       session.sessionPreset = AVCaptureSessionPresetHigh
     end
 
-    acceptableVideoDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo).select do |device|
-      device.position == AVCaptureDevicePositionBack
-    end
+    acceptableVideoDevices = AVCaptureDeviceDiscoverySession.discoverySessionWithDeviceTypes([AVCaptureDeviceTypeBuiltInWideAngleCamera,
+                                                                                              AVCaptureDeviceTypeBuiltInTelephotoCamera,
+                                                                                              AVCaptureDeviceTypeBuiltInDualCamera,
+                                                                                              AVCaptureDeviceTypeBuiltInTrueDepthCamera],
+                                                                                             mediaType: AVMediaTypeVideo,
+                                                                                             position: AVCaptureDevicePositionBack).devices
 
     if acceptableVideoDevices.count > 0
       input = AVCaptureDeviceInput.deviceInputWithDevice(acceptableVideoDevices.first, error: nil)
